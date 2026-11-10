@@ -1,0 +1,23 @@
+Item,Details
+Dataset source,bank.csv
+Total sampled customers,400
+Stage 1 training samples,300
+Stage 1 test samples,100
+Stage 1 target,y = yes/no
+Overall target distribution,"46 yes
+354 no"
+Training target distribution,"35 yes
+265 no"
+Removed field,duration
+Stage 1 task,Train the subscription prediction model using Stage1_Train and predict subscription probability for each customer in Stage1_Test.
+Stage 2 candidate rule,Rank the 100 Stage1_Test customers by predicted_probability and take the 10 highest-probability customers.
+Tie-breaking rule,"If two or more customers have identical predicted probabilities, use customer_id in ascending alphanumeric order."
+Stage 2 task,Select exactly 6 customers from the top 10 while maximizing expected net value and satisfying budget and capacity constraints.
+Expected net value formula,predicted_probability * expected_deposit_value - contact_cost
+Stage 2 constraints,N = 10 candidates; K = 6 (SUM(x_i) = 6); budget C = 25 (total contact_cost <= 25); capacity H = 22 (total capacity_units <= 22).
+Stage 3 input,The 6 customers selected in Stage 2.
+Stage 3 objective,Estimate the probability that at least 50% of the selected six customers subscribe.
+Stage 3 success condition,At least 3 of the 6 customers subscribe.
+Stage 1 sampling seed,42
+Train-test split seed,42
+Important,No optimal Stage 2 customer list or solved Stage 3 result is included.
