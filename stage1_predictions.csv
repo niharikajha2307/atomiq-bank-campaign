@@ -1,4 +1,4 @@
-customer_id,predicted_probability,rank,top10_flag
+customer_id,predicted_probability,rank,is_top_10
 C0031,0.3809563326386315,1,1
 C0079,0.3749714028732046,2,1
 C0081,0.2556127369341684,3,1
