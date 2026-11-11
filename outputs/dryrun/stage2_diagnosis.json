@@ -1,0 +1,73 @@
+{
+  "baseline1_combinations": {
+    "description": "Uniform random over C(10,6)=210 combinations",
+    "feasible_rate": 1.0,
+    "best_obj": 41.9494,
+    "p_optimal": 0.004883,
+    "shots": 2048
+  },
+  "baseline2_bitstrings": {
+    "description": "Uniform random over {0,1}^10 bitstrings",
+    "feasible_rate": 0.1958,
+    "best_obj": 41.9494,
+    "p_optimal": 0.001465,
+    "shots": 2048
+  },
+  "diagnosis_flaw": "In Job 2, slack variables for budget/capacity constraints expanded the circuit to 20 qubits. The Dicke ladder and XY mixer were applied across 20 qubits rather than 10 decision qubits, dispersing probability into non-decision qubits. Furthermore, checking feasibility on decision bits alone resolves the slack-mismatch artifact.",
+  "pure_10qubit_dicke_xy_results": [
+    {
+      "reps": 1,
+      "seed": 42,
+      "elapsed_s": 9.5,
+      "best_obj": 41.9494,
+      "gap": 0.0,
+      "p_optimal": 0.008301,
+      "invalid_rate": 0.0,
+      "k6_rate": 1.0,
+      "best_ids": [
+        "C0005",
+        "C0007",
+        "C0009",
+        "C0025",
+        "C0028",
+        "C0031"
+      ]
+    },
+    {
+      "reps": 2,
+      "seed": 42,
+      "elapsed_s": 12.52,
+      "best_obj": 41.9494,
+      "gap": 0.0,
+      "p_optimal": 0.007324,
+      "invalid_rate": 0.0,
+      "k6_rate": 1.0,
+      "best_ids": [
+        "C0005",
+        "C0007",
+        "C0009",
+        "C0025",
+        "C0028",
+        "C0031"
+      ]
+    },
+    {
+      "reps": 3,
+      "seed": 42,
+      "elapsed_s": 13.16,
+      "best_obj": 41.9494,
+      "gap": 0.0,
+      "p_optimal": 0.01416,
+      "invalid_rate": 0.0,
+      "k6_rate": 1.0,
+      "best_ids": [
+        "C0005",
+        "C0007",
+        "C0009",
+        "C0025",
+        "C0028",
+        "C0031"
+      ]
+    }
+  ]
+}

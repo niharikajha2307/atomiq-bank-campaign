@@ -1,6 +1,21 @@
 # Atomiq Hackathon Project Progress
 
-## Current Status: Stage 1 Training & 5-Fold Stratified Cross-Validation Complete
+## Current Status: Stage 1 Final Prediction Complete; Stage 2 Dicke+XY Diagnosis Complete
+
+### Stage 1 Final Model Prediction (OFFICIAL)
+- **Selected Model:** `LogisticRegression` (unweighted, $C=0.3$, L2 penalty, solver=`lbfgs`, max_iter=1000, seed=42).
+- **Selection Basis from 5-Fold Stratified CV:**
+  - Ranked #1 in Precision@10 ($0.2667 \pm 0.1333$) and lowest Brier score ($0.1012 \pm 0.0040$), with near-optimal log loss ($0.3546 \pm 0.0173$) and excellent calibration (ECE $= 0.0256 \pm 0.0154$).
+  - **Quantum Kernel Status:** Evaluated rigorously across 5 folds with 4 and 5 qubits (ZZ linear feature map). Neither beat the classical baselines (ROC-AUC $\approx 0.45 - 0.49$, PR-AUC $\approx 0.13 - 0.14$). In accordance with strict empirical selection criteria, quantum classifiers were NOT selected for final test predictions.
+- **Preprocessing & Hygiene:** `RobustScaler`, `OneHotEncoder`, and `pdays_contacted` feature flag fit exclusively on `Stage1_Train`. `customer_id` was strictly retained as an operational identifier key and never entered any transformer or model step.
+- **Prediction Execution:** Executed exactly ONCE on `Stage1_Test` (100 customers).
+- **Official Top-Level Deliverable:** [stage1_results.csv](stage1_results.csv)
+  - 100 rows, 4 columns: `customer_id`, `predicted_probability`, `rank`, `top10_flag`.
+  - Exact rank 1..100 with ties broken by ascending `customer_id`.
+  - Probability statistics: Min = `0.031462`, Max = `0.380956`, Mean = `0.113069`, Std = `0.063442`.
+  - Environment details: Python 3.13.5, `scikit-learn==1.9.1`, `numpy==2.5.4`, `pandas==3.1.1`, `qiskit==2.6.2`, `qiskit-aer==0.18.2`.
+
+---
 
 ### 1. Step 1: Verification & Problem Specification Comparison
 - **Status:** Complete.
@@ -104,6 +119,23 @@
   - [outputs/dryrun/dryrun_stage2.json](outputs/dryrun/dryrun_stage2.json)
   - [outputs/dryrun/dryrun_classical_benchmark.json](outputs/dryrun/dryrun_classical_benchmark.json)
   - [outputs/dryrun/dryrun_job2_results.json](outputs/dryrun/dryrun_job2_results.json)
+  - [outputs/dryrun/stage2_diagnosis.json](outputs/dryrun/stage2_diagnosis.json)
+
+### Stage 2 Diagnosis & Benchmark: Pure 10-Qubit Dicke(6)+XY vs Baselines
+- **Diagnosis of Prior ~99.9% Infeasibility in Dicke+XY (Job 2):**
+  - **Root Cause Identified:** In the previous script, slack variables for inequality constraints expanded the QuadraticProgram to 20 qubits. The approximate Dicke excitation ladder was inadvertently applied over 20 qubits rather than confining 6 ones strictly to the 10 decision qubits, dispersing Hamming weight into slack bits ($0.0\%$ shots had $K=6$ on decision bits).
+- **Pure 10-Qubit Formulation (Exact $|D(10,6)\rangle$ + XY Ring Mixer):**
+  - When implemented strictly on the 10 decision qubits with an XY ring mixer and exact Dicke state initialization, Hamming weight $K=6$ is preserved **100.0%** across all shots.
+  - Since all combinations with $K=6$ on this dummy dataset satisfy Budget ($\le 25$) and Capacity ($\le 22$), the infeasibility rate drops from $100\%$ to **0.0%**.
+- **Comparative Performance across Solvers (2,048 shots):**
+  - **Baseline 1 (Uniform over $C(10,6)=210$ combinations):** Feasibility = 100%, Best Obj = 41.9494, $P(\text{opt}) = 0.004883 \approx 0.49\%$ (theory $1/210 = 0.476\%$).
+  - **Baseline 2 (Uniform random 10-bit strings from $\{0,1\}^{10}$):** Feasibility = 19.58% (theory 20.51%), Best Obj = 41.9494, $P(\text{opt}) = 0.001465 \approx 0.15\%$ (theory $1/1024 = 0.098\%$).
+  - **Pure Dicke(6) + XY Mixer QAOA (10 qubits, seed 42):**
+    - `reps=1`: Infeasible = **0.0%**, Best Obj = **41.9494** (Gap = 0.0), $P(\text{opt}) = \mathbf{0.008301} \approx \mathbf{0.83\%}$ (Elapsed: 9.5s).
+    - `reps=2`: Infeasible = **0.0%**, Best Obj = **41.9494** (Gap = 0.0), $P(\text{opt}) = \mathbf{0.007324} \approx \mathbf{0.73\%}$ (Elapsed: 12.5s).
+    - `reps=3`: Infeasible = **0.0%**, Best Obj = **41.9494** (Gap = 0.0), $P(\text{opt}) = \mathbf{0.014160} \approx \mathbf{1.42\%}$ (Elapsed: 13.2s).
+- **Honest Finding on Quantum Concentration:**
+  - With a strictly constraint-preserving mixer on 10 qubits, QAOA achieves **100% feasibility** and concentrates ground state probability up to **1.42%** at $p=3$ — **beating uniform random combination sampling ($0.48\%$) by 3x** and uniform bitstring sampling ($0.10\%$) by 14x. However, classical brute force still finds the exact optimum in < 1 millisecond.
 
 ### Stage 2 Quantum Solver Benchmark: Penalty-Only vs Dicke+XY vs Random Sampling
 - **Evaluation Setup (Seed 42, 7, 123; reps=1, 2, 3; COBYLA maxiter=200; 5-min timeout per run):**
