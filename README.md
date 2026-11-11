@@ -61,7 +61,7 @@ Result files (top level): `stage1_results.csv`, `stage2_results.json` / `.csv`, 
 | Item | Value |
 |---|---|
 | Selected six | C0031, C0079, C0005, C0318, C0338, C0091 |
-| Best bitstring (Qiskit order, qubit 0 rightmost) | TODO-VERIFY (must have exactly six ones) |
+| Best bitstring (Qiskit order, qubit 0 rightmost) | `1010011011` (six ones; 75 of 2048 shots, 3.66%) |
 | Objective (expected net value) | 18.7169 |
 | Total cost / budget | 14 / 25 |
 | Total capacity / limit | 13 / 22 |
@@ -74,7 +74,7 @@ Result files (top level): `stage1_results.csv`, `stage2_results.json` / `.csv`, 
 
 **Circuit.** 6 qubits, one per selected customer, each prepared with `Ry(2*arcsin(sqrt(p_i)))` so that P(measure 1) = p_i. Customers respond independently, so no entanglement is needed (the circuit has no two-qubit gates). Success = at least 3 qubits read 1.
 
-**Qubit order (qubit 0 is the rightmost character of a printed Qiskit bitstring):** q0 = C0031 (0.3810), q1 = C0079 (0.3750), q2 = C0005 (0.2412), q3 = C0318 (0.2246), q4 = C0338 (0.2015), q5 = C0091 (0.1847). TODO-VERIFY against `stage3_results.json`.
+**Qubit order (qubit 0 is the rightmost character of a printed Qiskit bitstring):** q0 = C0031 (0.3810), q1 = C0079 (0.3750), q2 = C0005 (0.2412), q3 = C0318 (0.2246), q4 = C0338 (0.2015), q5 = C0091 (0.1847). The rotation angles are Ry(1.3304), Ry(1.3181), Ry(1.0267), Ry(0.9875), Ry(0.9311), Ry(0.8884). This order matches `stage3_results.json`.
 
 | Method | P(at least 3) | Error vs exact |
 |---|---|---|
@@ -85,7 +85,7 @@ Result files (top level): `stage1_results.csv`, `stage2_results.json` / `.csv`, 
 
 The ideal-circuit error shrinks with shots (512, 1024, 4096, 16384 shots are in `stage3_results.json`). **Noise model:** 0.1% single-qubit depolarizing error and 1.5% symmetric readout error. No error mitigation was applied; all noisy numbers are unmitigated.
 
-**Circuit statistics (Aer, no coupling map, basis gates u, cx, rz, sx, x):** 6 logical and 6 physical qubits; original and transpiled depth 2 (one rotation layer plus measurement); 6 single-qubit rotation gates, 0 two-qubit gates, 0 SWAPs. TODO-VERIFY gate counts against `count_ops()`.
+**Circuit statistics (Aer, no coupling map, basis gates u, cx, rz, sx, x):** 6 logical and 6 physical qubits; original and transpiled depth 2 (one rotation layer plus measurement); 6 single-qubit rotation gates, 0 two-qubit gates, 0 SWAPs. `count_ops()`: original `{ry: 6, measure: 6}`, transpiled `{u: 6, measure: 6}`.
 
 **Error propagation (Stage 1 probabilities shifted by a constant delta, all six together):**
 
@@ -115,7 +115,12 @@ python -m venv .venv
 .\.venv\Scripts\python.exe scripts/run_final_stage1.py
 .\.venv\Scripts\python.exe scripts/run_real_stage2_and_stage3.py
 ```
-  On macOS or Linux, use `.venv/bin/python` instead. TODO-VERIFY: add the command and runtime for the cross-validation and quantum-kernel scripts.
+  On macOS or Linux, use `.venv/bin/python` instead. To regenerate the Stage 1 cross-validation results:
+```
+.\.venv\Scripts\python.exe scripts/run_stage1_cv.py
+.\.venv\Scripts\python.exe scripts/run_job1.py
+```
+  `run_stage1_cv.py` runs the original classical baselines and the 4- and 5-qubit quantum kernels (about 1 minute; writes `outputs/stage1_cv_metrics.csv` and `outputs/stage1_cv_curves.png`). `run_job1.py` adds the constant-prior baseline, the unweighted logistic regressions (C = 0.03, 0.1, 0.3, 1.0) and the balanced logistic regression with prior shift (about 2 seconds).
 - **Smoke test:** a 2-qubit Bell-state check (`tests/`) only confirms the environment works. It is not a quantum result.
 
 ## 8. Limitations
