@@ -70,10 +70,51 @@
 
 ---
 
+## 6. Stage 2 & 3 Dummy Dry Run Verification (Completed)
+- **Status:** Complete on **DUMMY data ONLY** (10 test candidate IDs from `Stage2_Data` with seed=42 dummy probabilities).
+- **Strict Boundary:** No test data was evaluated, and top-level final results files were NOT created. All dry-run artifacts are isolated in [outputs/dryrun/](outputs/dryrun/).
+
+### Stage 2 QUBO & Quantum Optimization
+- **QUBO Formulation & Qubit Count:**
+  - 10 decision variables ($x_0 \dots x_9$) for customer selection ($K=6$).
+  - Budget ($\le 25$) encoded via 5 binary slack bits.
+  - Capacity ($\le 22$) encoded via 5 binary slack bits.
+  - **Total QUBO size:** Exactly **20 qubits** (185 Pauli terms in Ising Hamiltonian).
+- **Solver Performance Comparison:**
+  - **Classical Brute Force** ($C(10,6) = 210$ combinations): Optimal objective = **41.9494** (Selected: `C0005`, `C0007`, `C0009`, `C0025`, `C0028`, `C0031`; Budget used: 14.0/25; Capacity used: 16.0/22; 210/210 valid combinations).
+  - **NumPyMinimumEigensolver** (Exact QUBO diagonalization): Objective = **41.9494** in 1.44s (100% match with classical brute force).
+  - **QAOA reps=1** (`SamplerV2` on Aer, COBYLA 50 iters, seed=42): Solved in **15.5s**. Found valid 6-customer selection with objective **41.9494** (Gap vs Classical: **0.0**, exact match!).
+  - **QAOA reps=2** (`SamplerV2` on Aer, COBYLA 50 iters, seed=42): Solved in **47.0s**. Valid selection with objective **39.4252** (Gap vs Classical: **2.5242**; selected rank #4 combination).
+  - *Diagnosis on prior timeouts:* Qiskit's `StatevectorSampler` hangs on matrix exponential decomposition for 20-qubit Hamiltonians in Python 3.13; decomposing the `QAOAAnsatz` down to native gates and executing on `qiskit_aer.primitives.SamplerV2` executes within seconds.
+- **Dry-run Artifacts:**
+  - [outputs/dryrun/dryrun_stage2.json](outputs/dryrun/dryrun_stage2.json)
+  - [outputs/dryrun/dryrun_classical_benchmark.json](outputs/dryrun/dryrun_classical_benchmark.json)
+
+### Stage 3 Success Probability Circuit Simulation
+- **Setup:** 6 qubits prepared with $R_y(2 \arcsin(\sqrt{p_i}))$ rotation gates representing subscription probabilities of Stage 2 selected customers.
+- **Endianness Convention:** Explicitly handled Qiskit little-endian format (Qubit 0 is rightmost bit).
+- **Exact vs Simulation Results (Success = $\ge 3$ subscribers):**
+  - **Exact Poisson-Binomial DP:** $P(\ge 3) = 0.496398$
+  - **Monte Carlo (100,000 samples):** $P(\ge 3) = 0.494680$ (Absolute error: 0.001718)
+  - **Ideal Circuit Execution:**
+    - Shots = 512: $P = 0.4785$ (Error: 0.0179)
+    - Shots = 1024: $P = 0.4883$ (Error: 0.0081)
+    - Shots = 4096: $P = 0.5034$ (Error: 0.0070)
+    - Shots = 16384: $P = 0.4924$ (Error: 0.0040 — error shrinks monotonically with $1/\sqrt{N}$)
+  - **Noisy Simulation (Depolarizing + 2% Readout Error):** Unmitigated $P(\ge 3) = 0.511230$ (Error: 0.014833).
+  - **Circuit Characteristics:** 6 logical/physical qubits, circuit depth = 2, 6 1-qubit gates, 0 2-qubit gates, 0 SWAPs.
+  - **Sensitivity Analysis:** Uniform probability shifts of $\pm 0.02$ and $\pm 0.05$ produce relative shifts of $\approx \pm 8.6\%$ and $\pm 21.4\%$ in campaign success probability.
+- **Dry-run Artifact:**
+  - [outputs/dryrun/dryrun_stage3.json](outputs/dryrun/dryrun_stage3.json)
+
+---
+
 ## What Is Next
 - Awaiting organizer response on the two open questions (`customer_id` mapping and `Stage2_Data` row count scope).
 - Once confirmed:
   1. Fit selected model (`HistGradientBoosting_Calibrated`) on full `Stage1_Train`.
   2. Run single prediction on `Stage1_Test`.
   3. Produce `stage1_results.csv` with continuous probabilities, ranks, and top-10 flag.
-  4. Proceed to Stage 2 QUBO formulation and quantum solver.
+  4. Run Stage 2 QUBO on the true top-10 customers $\to$ `outputs/stage2_results.json`.
+  5. Run Stage 3 circuit on the 6 chosen customers $\to$ `outputs/stage3_results.json`.
+  6. Final README and presentation preparation.

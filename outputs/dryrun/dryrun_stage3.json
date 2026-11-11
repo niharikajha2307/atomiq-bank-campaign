@@ -1,0 +1,162 @@
+{
+  "NOTE": "DUMMY DRY RUN \u2014 Stage 3 uses dummy Stage 2 selections",
+  "customer_qubit_mapping": [
+    {
+      "qubit": 0,
+      "customer_id": "C0007",
+      "probability": 0.5729,
+      "note": "Qubit 0 = bit at position 5 from left in 6-char bitstring"
+    },
+    {
+      "qubit": 1,
+      "customer_id": "C0009",
+      "probability": 0.4526,
+      "note": "Qubit 1 = bit at position 4 from left in 6-char bitstring"
+    },
+    {
+      "qubit": 2,
+      "customer_id": "C0020",
+      "probability": 0.1358,
+      "note": "Qubit 2 = bit at position 3 from left in 6-char bitstring"
+    },
+    {
+      "qubit": 3,
+      "customer_id": "C0025",
+      "probability": 0.5264,
+      "note": "Qubit 3 = bit at position 2 from left in 6-char bitstring"
+    },
+    {
+      "qubit": 4,
+      "customer_id": "C0028",
+      "probability": 0.3806,
+      "note": "Qubit 4 = bit at position 1 from left in 6-char bitstring"
+    },
+    {
+      "qubit": 5,
+      "customer_id": "C0031",
+      "probability": 0.4394,
+      "note": "Qubit 5 = bit at position 0 from left in 6-char bitstring"
+    }
+  ],
+  "endian_note": "Qiskit little-endian: qubit 0 is the RIGHTMOST character of the bitstring, qubit 5 is the LEFTMOST.",
+  "exact_P_geq3": 0.49639765,
+  "monte_carlo": {
+    "n_samples": 100000,
+    "seed": 42,
+    "estimate": 0.49468,
+    "abs_error_vs_exact": 0.001718
+  },
+  "circuit_stats": {
+    "logical_qubits": 6,
+    "physical_qubits": 6,
+    "original_depth": 2,
+    "original_ops": {
+      "ry": 6,
+      "measure": 6
+    },
+    "transpiled_depth": 2,
+    "transpiled_ops": {
+      "u3": 6,
+      "measure": 6
+    },
+    "one_qubit_gates": 6,
+    "two_qubit_gates": 0,
+    "swap_count": 0
+  },
+  "ideal_shot_results": [
+    {
+      "shots": 512,
+      "seed": 42,
+      "estimated_P": 0.478516,
+      "abs_error": 0.017882
+    },
+    {
+      "shots": 1024,
+      "seed": 7,
+      "estimated_P": 0.488281,
+      "abs_error": 0.008116
+    },
+    {
+      "shots": 4096,
+      "seed": 123,
+      "estimated_P": 0.503418,
+      "abs_error": 0.00702
+    },
+    {
+      "shots": 16384,
+      "seed": 999,
+      "estimated_P": 0.492432,
+      "abs_error": 0.003966
+    }
+  ],
+  "noisy_simulation": {
+    "shots": 4096,
+    "seed": 42,
+    "noise_model": {
+      "depolarizing_1q": 0.001,
+      "depolarizing_2q": 0.01,
+      "readout_error": 0.02
+    },
+    "unmitigated_P_geq3": 0.51123,
+    "abs_error_vs_exact": 0.014833,
+    "note": "Unmitigated only. No error mitigation applied."
+  },
+  "error_propagation": {
+    "base_P_geq3": 0.496398,
+    "shifts": {
+      "delta_-0.05": {
+        "shifted_probs": [
+          0.5229,
+          0.4026,
+          0.0858,
+          0.4764,
+          0.3306,
+          0.3894
+        ],
+        "P_geq3": 0.388858,
+        "change": -0.10754,
+        "pct_change": -21.66
+      },
+      "delta_-0.02": {
+        "shifted_probs": [
+          0.5529,
+          0.4326,
+          0.1158,
+          0.5064,
+          0.3606,
+          0.4194
+        ],
+        "P_geq3": 0.45337,
+        "change": -0.043028,
+        "pct_change": -8.67
+      },
+      "delta_+0.02": {
+        "shifted_probs": [
+          0.5929,
+          0.4726,
+          0.1558,
+          0.5464,
+          0.4006,
+          0.4594
+        ],
+        "P_geq3": 0.53902,
+        "change": 0.042623,
+        "pct_change": 8.59
+      },
+      "delta_+0.05": {
+        "shifted_probs": [
+          0.6229,
+          0.5026,
+          0.1858,
+          0.5764,
+          0.4306,
+          0.4894
+        ],
+        "P_geq3": 0.601453,
+        "change": 0.105055,
+        "pct_change": 21.16
+      }
+    },
+    "note": "All 6 probabilities shifted simultaneously by the same delta. Individual shifts would need a Jacobian/sensitivity analysis."
+  }
+}

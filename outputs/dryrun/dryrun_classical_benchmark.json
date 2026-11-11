@@ -1,0 +1,189 @@
+{
+  "NOTE": "DUMMY DRY RUN \u2014 not real Stage 1 probabilities",
+  "total_combinations": 210,
+  "feasible_combinations": 210,
+  "infeasible_combinations": 0,
+  "classical_optimum": {
+    "objective_value": 41.9494,
+    "selected_ids": [
+      "C0005",
+      "C0007",
+      "C0009",
+      "C0025",
+      "C0028",
+      "C0031"
+    ],
+    "selected_indices": [
+      0,
+      1,
+      2,
+      7,
+      8,
+      9
+    ],
+    "budget_used": 14.0,
+    "capacity_used": 16.0
+  },
+  "top5_feasible": [
+    {
+      "rank": 1,
+      "objective": 41.9494,
+      "ids": [
+        "C0005",
+        "C0007",
+        "C0009",
+        "C0025",
+        "C0028",
+        "C0031"
+      ]
+    },
+    {
+      "rank": 2,
+      "objective": 40.6422,
+      "ids": [
+        "C0007",
+        "C0009",
+        "C0012",
+        "C0025",
+        "C0028",
+        "C0031"
+      ]
+    },
+    {
+      "rank": 3,
+      "objective": 40.306,
+      "ids": [
+        "C0005",
+        "C0007",
+        "C0009",
+        "C0012",
+        "C0025",
+        "C0028"
+      ]
+    },
+    {
+      "rank": 4,
+      "objective": 39.4252,
+      "ids": [
+        "C0007",
+        "C0009",
+        "C0020",
+        "C0025",
+        "C0028",
+        "C0031"
+      ]
+    },
+    {
+      "rank": 5,
+      "objective": 39.089,
+      "ids": [
+        "C0005",
+        "C0007",
+        "C0009",
+        "C0020",
+        "C0025",
+        "C0028"
+      ]
+    }
+  ],
+  "comparison_with_qaoa": {
+    "qaoa_reps1": {
+      "qaoa_valid": true,
+      "qaoa_objective": 41.9494,
+      "classical_optimum": 41.9494,
+      "gap": 0.0,
+      "matched_optimal": true,
+      "elapsed_s": 15.5
+    },
+    "qaoa_reps2": {
+      "qaoa_valid": true,
+      "qaoa_objective": 39.4252,
+      "classical_optimum": 41.9494,
+      "gap": 2.5242,
+      "matched_optimal": false,
+      "elapsed_s": 47.0
+    }
+  },
+  "candidates": [
+    {
+      "customer_id": "C0005",
+      "dummy_probability": 0.256,
+      "contact_cost": 2.0,
+      "expected_deposit_value": 21.0,
+      "capacity_units": 3.0,
+      "expected_net_value": 3.376
+    },
+    {
+      "customer_id": "C0007",
+      "dummy_probability": 0.5729,
+      "contact_cost": 1.0,
+      "expected_deposit_value": 20.0,
+      "capacity_units": 3.0,
+      "expected_net_value": 10.458
+    },
+    {
+      "customer_id": "C0009",
+      "dummy_probability": 0.4526,
+      "contact_cost": 1.0,
+      "expected_deposit_value": 29.0,
+      "capacity_units": 2.0,
+      "expected_net_value": 12.1254
+    },
+    {
+      "customer_id": "C0012",
+      "dummy_probability": 0.3793,
+      "contact_cost": 4.0,
+      "expected_deposit_value": 16.0,
+      "capacity_units": 4.0,
+      "expected_net_value": 2.0688
+    },
+    {
+      "customer_id": "C0019",
+      "dummy_probability": 0.1358,
+      "contact_cost": 4.0,
+      "expected_deposit_value": 17.0,
+      "capacity_units": 3.0,
+      "expected_net_value": -1.6914
+    },
+    {
+      "customer_id": "C0020",
+      "dummy_probability": 0.1358,
+      "contact_cost": 2.0,
+      "expected_deposit_value": 21.0,
+      "capacity_units": 4.0,
+      "expected_net_value": 0.8518
+    },
+    {
+      "customer_id": "C0022",
+      "dummy_probability": 0.0819,
+      "contact_cost": 2.0,
+      "expected_deposit_value": 25.0,
+      "capacity_units": 3.0,
+      "expected_net_value": 0.0475
+    },
+    {
+      "customer_id": "C0025",
+      "dummy_probability": 0.5264,
+      "contact_cost": 4.0,
+      "expected_deposit_value": 19.0,
+      "capacity_units": 3.0,
+      "expected_net_value": 6.0016
+    },
+    {
+      "customer_id": "C0028",
+      "dummy_probability": 0.3806,
+      "contact_cost": 4.0,
+      "expected_deposit_value": 27.0,
+      "capacity_units": 4.0,
+      "expected_net_value": 6.2762
+    },
+    {
+      "customer_id": "C0031",
+      "dummy_probability": 0.4394,
+      "contact_cost": 2.0,
+      "expected_deposit_value": 13.0,
+      "capacity_units": 1.0,
+      "expected_net_value": 3.7122
+    }
+  ]
+}
