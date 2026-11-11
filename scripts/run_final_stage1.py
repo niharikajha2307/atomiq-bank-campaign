@@ -58,7 +58,7 @@ def main():
     results_df["rank"] = np.arange(1, len(results_df) + 1)
     results_df["is_top_10"] = (results_df["rank"] <= 10).astype(int)
 
-    out_path = "stage1_predictions.csv"
+    out_path = "stage1_results.csv"
     results_df.to_csv(out_path, index=False)
     print(f"Saved {out_path} with {len(results_df)} rows.")
 

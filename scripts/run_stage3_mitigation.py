@@ -9,7 +9,7 @@ Stage 3 Readout-Error Mitigation:
     A = [[1-e, e], [e, 1-e]] with e = 0.015
     Full 6-qubit matrix is tensor product: A^-1_6q = (A^-1)^⊗6
 - Evaluates raw-inverted and clipped-renormalized probability distributions
-- Updates stage3_simulation.json and stage3_simulation.csv with mitigation fields
+- Updates stage3_results.json and stage3_results.csv with mitigation fields
 """
 
 import os
@@ -32,7 +32,7 @@ def main():
     print("=" * 70)
 
     # 1. Load selected customers and probabilities
-    stage2_df = pd.read_csv("stage2_selection.csv")
+    stage2_df = pd.read_csv("stage2_results.csv")
     s3_probs = stage2_df["predicted_probability"].values
     s3_ids = stage2_df["customer_id"].tolist()
 
@@ -114,8 +114,8 @@ def main():
     print(f"Noisy Mitigated (Raw Inversion): {p_mit_raw_val:.6f} | Min Prob in Dist: {p_mit_raw.min():.6e}")
     print(f"Noisy Mitigated (Clipped)     : {p_mit_clipped_val:.6f} | Error: {mit_err:.6f} | SE: {se_mit:.6f}")
 
-    # 2. Update stage3_simulation.json
-    json_path = "stage3_simulation.json"
+    # 2. Update stage3_results.json
+    json_path = "stage3_results.json"
     with open(json_path, "r") as f:
         data = json.load(f)
 
@@ -133,8 +133,8 @@ def main():
         json.dump(data, f, indent=2)
     print(f"Updated {json_path}.")
 
-    # 3. Update stage3_simulation.csv
-    csv_path = "stage3_simulation.csv"
+    # 3. Update stage3_results.csv
+    csv_path = "stage3_results.csv"
     df_s3 = pd.read_csv(csv_path)
 
     # Add mitigation columns while preserving existing rows and columns
