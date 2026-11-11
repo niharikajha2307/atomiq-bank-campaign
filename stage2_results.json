@@ -1,0 +1,660 @@
+{
+  "problem_specification": {
+    "candidate_count": 10,
+    "selection_count_K": 6,
+    "budget_limit": 25.0,
+    "capacity_limit": 22.0,
+    "total_combinations_C_10_6": 210,
+    "feasible_combinations": 210,
+    "inequalities_bind": false
+  },
+  "top10_candidates": [
+    {
+      "rank": 1,
+      "customer_id": "C0031",
+      "predicted_probability": 0.3809563326386315,
+      "contact_cost": 2.0,
+      "expected_deposit_value": 13.0,
+      "capacity_units": 1.0,
+      "expected_net_value": 2.952432324302209
+    },
+    {
+      "rank": 2,
+      "customer_id": "C0079",
+      "predicted_probability": 0.3749714028732046,
+      "contact_cost": 3.0,
+      "expected_deposit_value": 24.0,
+      "capacity_units": 3.0,
+      "expected_net_value": 5.99931366895691
+    },
+    {
+      "rank": 3,
+      "customer_id": "C0081",
+      "predicted_probability": 0.2556127369341684,
+      "contact_cost": 4.0,
+      "expected_deposit_value": 17.0,
+      "capacity_units": 1.0,
+      "expected_net_value": 0.34541652788086274
+    },
+    {
+      "rank": 4,
+      "customer_id": "C0005",
+      "predicted_probability": 0.24119034118622493,
+      "contact_cost": 2.0,
+      "expected_deposit_value": 21.0,
+      "capacity_units": 3.0,
+      "expected_net_value": 3.0649971649107233
+    },
+    {
+      "rank": 5,
+      "customer_id": "C0318",
+      "predicted_probability": 0.224620278468405,
+      "contact_cost": 3.0,
+      "expected_deposit_value": 21.0,
+      "capacity_units": 3.0,
+      "expected_net_value": 1.7170258478365046
+    },
+    {
+      "rank": 6,
+      "customer_id": "C0208",
+      "predicted_probability": 0.21641907286361858,
+      "contact_cost": 4.0,
+      "expected_deposit_value": 21.0,
+      "capacity_units": 3.0,
+      "expected_net_value": 0.5448005301359906
+    },
+    {
+      "rank": 7,
+      "customer_id": "C0183",
+      "predicted_probability": 0.20966007867992928,
+      "contact_cost": 2.0,
+      "expected_deposit_value": 14.0,
+      "capacity_units": 3.0,
+      "expected_net_value": 0.9352411015190101
+    },
+    {
+      "rank": 8,
+      "customer_id": "C0338",
+      "predicted_probability": 0.20153278958214402,
+      "contact_cost": 2.0,
+      "expected_deposit_value": 18.0,
+      "capacity_units": 2.0,
+      "expected_net_value": 1.6275902124785921
+    },
+    {
+      "rank": 9,
+      "customer_id": "C0388",
+      "predicted_probability": 0.185088179013401,
+      "contact_cost": 4.0,
+      "expected_deposit_value": 25.0,
+      "capacity_units": 3.0,
+      "expected_net_value": 0.6272044753350245
+    },
+    {
+      "rank": 10,
+      "customer_id": "C0091",
+      "predicted_probability": 0.18467375981494016,
+      "contact_cost": 2.0,
+      "expected_deposit_value": 29.0,
+      "capacity_units": 1.0,
+      "expected_net_value": 3.3555390346332645
+    }
+  ],
+  "final_selection": {
+    "selected_customer_ids": [
+      "C0031",
+      "C0079",
+      "C0005",
+      "C0318",
+      "C0338",
+      "C0091"
+    ],
+    "selected_indices": [
+      0,
+      1,
+      3,
+      4,
+      7,
+      9
+    ],
+    "objective_value": 18.716898,
+    "gap_vs_brute_force": 0.0,
+    "matches_brute_force": true,
+    "total_contact_cost": 14.0,
+    "total_capacity_units": 13.0,
+    "budget_limit": 25.0,
+    "capacity_limit": 22.0
+  },
+  "classical_brute_force": {
+    "objective_value": 18.716898,
+    "selected_customer_ids": [
+      "C0031",
+      "C0079",
+      "C0005",
+      "C0318",
+      "C0338",
+      "C0091"
+    ],
+    "selected_indices": [
+      0,
+      1,
+      3,
+      4,
+      7,
+      9
+    ],
+    "total_contact_cost": 14.0,
+    "total_capacity_units": 13.0
+  },
+  "random_baselines": {
+    "baseline1_combinations_p_opt": 0.00732421875,
+    "baseline2_bitstrings_p_opt": 0.0009765625,
+    "baseline2_feasible_rate": 0.19580078125
+  },
+  "penalty_only_comparison": {
+    "reps": 2,
+    "seed": 42,
+    "objective_value": 18.716898,
+    "gap": 0.0,
+    "invalid_rate": 0.7827,
+    "p_optimal": 0.000977,
+    "runtime_s": 53.33
+  },
+  "quantum_dicke_xy_runs": [
+    {
+      "reps": 1,
+      "seed": 42,
+      "elapsed_s": 6.53,
+      "best_obj": 18.716898,
+      "gap": 0.0,
+      "p_optimal_shots": 0.036621,
+      "exact_statevector_p_optimal": 0.033601,
+      "invalid_rate": 0.0,
+      "best_ids": [
+        "C0031",
+        "C0079",
+        "C0005",
+        "C0318",
+        "C0338",
+        "C0091"
+      ],
+      "best_indices": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        9
+      ],
+      "optimal_parameters": [
+        0.4252,
+        0.2507
+      ],
+      "top_bitstrings": [
+        [
+          "1011011010",
+          98
+        ],
+        [
+          "1010101011",
+          91
+        ],
+        [
+          "1010111010",
+          84
+        ],
+        [
+          "1010011011",
+          75
+        ],
+        [
+          "1010011110",
+          70
+        ]
+      ],
+      "matches_brute_force": true
+    },
+    {
+      "reps": 1,
+      "seed": 7,
+      "elapsed_s": 7.07,
+      "best_obj": 18.716898,
+      "gap": 0.0,
+      "p_optimal_shots": 0.030273,
+      "exact_statevector_p_optimal": 0.032281,
+      "invalid_rate": 0.0,
+      "best_ids": [
+        "C0031",
+        "C0079",
+        "C0005",
+        "C0318",
+        "C0338",
+        "C0091"
+      ],
+      "best_indices": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        9
+      ],
+      "optimal_parameters": [
+        0.3444,
+        0.3253
+      ],
+      "top_bitstrings": [
+        [
+          "1010101011",
+          106
+        ],
+        [
+          "1011011010",
+          86
+        ],
+        [
+          "0101011011",
+          72
+        ],
+        [
+          "1001011011",
+          66
+        ],
+        [
+          "1010111010",
+          64
+        ]
+      ],
+      "matches_brute_force": true
+    },
+    {
+      "reps": 1,
+      "seed": 123,
+      "elapsed_s": 6.55,
+      "best_obj": 18.716898,
+      "gap": 0.0,
+      "p_optimal_shots": 0.027832,
+      "exact_statevector_p_optimal": 0.033439,
+      "invalid_rate": 0.0,
+      "best_ids": [
+        "C0031",
+        "C0079",
+        "C0005",
+        "C0318",
+        "C0338",
+        "C0091"
+      ],
+      "best_indices": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        9
+      ],
+      "optimal_parameters": [
+        0.3814,
+        0.2749
+      ],
+      "top_bitstrings": [
+        [
+          "1011011010",
+          109
+        ],
+        [
+          "1010101011",
+          99
+        ],
+        [
+          "1010111010",
+          73
+        ],
+        [
+          "1110101010",
+          59
+        ],
+        [
+          "1011101010",
+          58
+        ]
+      ],
+      "matches_brute_force": true
+    },
+    {
+      "reps": 2,
+      "seed": 42,
+      "elapsed_s": 7.99,
+      "best_obj": 18.716898,
+      "gap": 0.0,
+      "p_optimal_shots": 0.033691,
+      "exact_statevector_p_optimal": 0.031263,
+      "invalid_rate": 0.0,
+      "best_ids": [
+        "C0031",
+        "C0079",
+        "C0005",
+        "C0318",
+        "C0338",
+        "C0091"
+      ],
+      "best_indices": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        9
+      ],
+      "optimal_parameters": [
+        0.3317,
+        0.1887,
+        0.0733,
+        0.0855
+      ],
+      "top_bitstrings": [
+        [
+          "1011011010",
+          113
+        ],
+        [
+          "1010101011",
+          112
+        ],
+        [
+          "1010111010",
+          88
+        ],
+        [
+          "1010011011",
+          69
+        ],
+        [
+          "0101011011",
+          54
+        ]
+      ],
+      "matches_brute_force": true
+    },
+    {
+      "reps": 2,
+      "seed": 7,
+      "elapsed_s": 8.06,
+      "best_obj": 18.716898,
+      "gap": 0.0,
+      "p_optimal_shots": 0.030273,
+      "exact_statevector_p_optimal": 0.029341,
+      "invalid_rate": 0.0,
+      "best_ids": [
+        "C0031",
+        "C0079",
+        "C0005",
+        "C0318",
+        "C0338",
+        "C0091"
+      ],
+      "best_indices": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        9
+      ],
+      "optimal_parameters": [
+        0.2049,
+        0.1457,
+        0.1561,
+        0.1435
+      ],
+      "top_bitstrings": [
+        [
+          "1011011010",
+          113
+        ],
+        [
+          "1010101011",
+          93
+        ],
+        [
+          "1010111010",
+          77
+        ],
+        [
+          "1010101110",
+          64
+        ],
+        [
+          "1010011011",
+          62
+        ]
+      ],
+      "matches_brute_force": true
+    },
+    {
+      "reps": 2,
+      "seed": 123,
+      "elapsed_s": 9.82,
+      "best_obj": 18.716898,
+      "gap": 0.0,
+      "p_optimal_shots": 0.027832,
+      "exact_statevector_p_optimal": 0.031446,
+      "invalid_rate": 0.0,
+      "best_ids": [
+        "C0031",
+        "C0079",
+        "C0005",
+        "C0318",
+        "C0338",
+        "C0091"
+      ],
+      "best_indices": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        9
+      ],
+      "optimal_parameters": [
+        0.1061,
+        0.049,
+        0.2933,
+        0.2057
+      ],
+      "top_bitstrings": [
+        [
+          "1011011010",
+          133
+        ],
+        [
+          "1010101011",
+          104
+        ],
+        [
+          "1010111010",
+          67
+        ],
+        [
+          "1010011011",
+          57
+        ],
+        [
+          "1010101110",
+          56
+        ]
+      ],
+      "matches_brute_force": true
+    },
+    {
+      "reps": 3,
+      "seed": 42,
+      "elapsed_s": 11.43,
+      "best_obj": 18.716898,
+      "gap": 0.0,
+      "p_optimal_shots": 0.036621,
+      "exact_statevector_p_optimal": 0.035353,
+      "invalid_rate": 0.0,
+      "best_ids": [
+        "C0031",
+        "C0079",
+        "C0005",
+        "C0318",
+        "C0338",
+        "C0091"
+      ],
+      "best_indices": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        9
+      ],
+      "optimal_parameters": [
+        0.1776,
+        0.0849,
+        0.2062,
+        0.1412,
+        0.0344,
+        0.102
+      ],
+      "top_bitstrings": [
+        [
+          "1011011010",
+          127
+        ],
+        [
+          "1010101011",
+          118
+        ],
+        [
+          "1010111010",
+          87
+        ],
+        [
+          "1010011011",
+          75
+        ],
+        [
+          "0101011011",
+          58
+        ]
+      ],
+      "matches_brute_force": true
+    },
+    {
+      "reps": 3,
+      "seed": 7,
+      "elapsed_s": 11.81,
+      "best_obj": 18.716898,
+      "gap": 0.0,
+      "p_optimal_shots": 0.031738,
+      "exact_statevector_p_optimal": 0.031055,
+      "invalid_rate": 0.0,
+      "best_ids": [
+        "C0031",
+        "C0079",
+        "C0005",
+        "C0318",
+        "C0338",
+        "C0091"
+      ],
+      "best_indices": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        9
+      ],
+      "optimal_parameters": [
+        0.1066,
+        0.1556,
+        0.1517,
+        0.1195,
+        0.1179,
+        0.1089
+      ],
+      "top_bitstrings": [
+        [
+          "1011011010",
+          127
+        ],
+        [
+          "1010101011",
+          98
+        ],
+        [
+          "1010111010",
+          77
+        ],
+        [
+          "1010101110",
+          69
+        ],
+        [
+          "0110101011",
+          66
+        ]
+      ],
+      "matches_brute_force": true
+    },
+    {
+      "reps": 3,
+      "seed": 123,
+      "elapsed_s": 26.98,
+      "best_obj": 18.716898,
+      "gap": 0.0,
+      "p_optimal_shots": 0.027832,
+      "exact_statevector_p_optimal": 0.03195,
+      "invalid_rate": 0.0,
+      "best_ids": [
+        "C0031",
+        "C0079",
+        "C0005",
+        "C0318",
+        "C0338",
+        "C0091"
+      ],
+      "best_indices": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        9
+      ],
+      "optimal_parameters": [
+        0.1356,
+        0.091,
+        0.1426,
+        0.1464,
+        0.097,
+        0.1145
+      ],
+      "top_bitstrings": [
+        [
+          "1011011010",
+          132
+        ],
+        [
+          "1010101011",
+          122
+        ],
+        [
+          "1010111010",
+          70
+        ],
+        [
+          "0110101011",
+          60
+        ],
+        [
+          "1010011011",
+          57
+        ]
+      ],
+      "matches_brute_force": true
+    }
+  ]
+}

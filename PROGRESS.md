@@ -1,6 +1,6 @@
 # Atomiq Hackathon Project Progress
 
-## Current Status: Stage 1 Final Prediction Complete; Stage 2 Dicke+XY Diagnosis Complete
+## Current Status: Stage 1, Stage 2, and Stage 3 Real Runs Complete (All Deliverables Generated)
 
 ### Stage 1 Final Model Prediction (OFFICIAL)
 - **Selected Model:** `LogisticRegression` (unweighted, $C=0.3$, L2 penalty, solver=`lbfgs`, max_iter=1000, seed=42).
@@ -178,12 +178,73 @@
 
 ---
 
-## What Is Next
-- Awaiting organizer response on the two open questions (`customer_id` mapping and `Stage2_Data` row count scope).
-- Once confirmed:
-  1. Fit the final selected model (choice **pending CV review**) on full `Stage1_Train`.
-  2. Run single prediction on `Stage1_Test`.
-  3. Produce `stage1_results.csv` with continuous probabilities, ranks, and top-10 flag.
-  4. Run Stage 2 QUBO on the true top-10 customers $\to$ `outputs/stage2_results.json`.
-  5. Run Stage 3 circuit on the 6 chosen customers $\to$ `outputs/stage3_results.json`.
-  6. Final README and presentation preparation.
+## 7. Real Stage 2 Optimization Results (Official)
+
+- **Deliverables:** [stage2_results.json](stage2_results.json), [stage2_results.csv](stage2_results.csv) at top level.
+- **Top 10 Selection Pool:** Merged from [stage1_results.csv](stage1_results.csv) (`top10_flag == 1`) and `data/Stage2_Data.csv`.
+- **Constraint Binding Analysis:**
+  - All $C(10,6) = 210$ combinations strictly satisfy Budget ($\sum c_i \le 25$) and Capacity ($\sum u_i \le 22$).
+  - Therefore, the two inequality constraints **do not bind** for this top 10 pool, meaning slack variables do not alter the feasibility boundary or optimal solution. The full formulation (equations, penalty weights, and binary slack expansion) is retained in the codebase and write-up for methodological completeness.
+- **Classical Brute Force Optimum:**
+  - Objective ($ENV$): **18.716898**
+  - Selected 6 Customers: `['C0031', 'C0079', 'C0005', 'C0318', 'C0338', 'C0091']`
+  - Budget Used: 14.00 / 25.0 | Capacity Used: 13.00 / 22.0
+- **Classical Random Baselines (2048 shots):**
+  - Baseline 1 (Uniform over 210 combinations): $P(\text{opt}) = 0.007324$ ($15/2048$), Best Obj = 18.7169.
+  - Baseline 2 (Uniform $\{0,1\}^{10}$ bitstrings): Feasible = $19.58\%$, $P(\text{opt}) = 0.000977$ ($2/2048$), Best Obj = 18.7169.
+- **Penalty-Only QAOA (reps=2, seed=42):**
+  - Feasible fraction: $21.73\%$
+  - Best valid objective: **18.7169** (Gap: 0.0000), $P(\text{opt}) = 0.000977$, Runtime: 53.3s.
+- **Constraint-Preserving Dicke(6) + XY-Ring Mixer QAOA (10 decision qubits, 2048 shots):**
+  - All 9 configurations achieved **0.0% invalid rate** (100% feasibility), **Gap = 0.0000**, and found the exact global optimum bitstring:
+    - `reps=1, seed=42`: Obj = 18.716898, $P(\text{opt})_{\text{shots}} = 0.0366$, $P(\text{opt})_{\text{SV}} = 0.0336$, Runtime = 6.5s
+    - `reps=1, seed=7`: Obj = 18.716898, $P(\text{opt})_{\text{shots}} = 0.0303$, $P(\text{opt})_{\text{SV}} = 0.0323$, Runtime = 7.1s
+    - `reps=1, seed=123`: Obj = 18.716898, $P(\text{opt})_{\text{shots}} = 0.0278$, $P(\text{opt})_{\text{SV}} = 0.0334$, Runtime = 6.6s
+    - `reps=2, seed=42`: Obj = 18.716898, $P(\text{opt})_{\text{shots}} = 0.0337$, $P(\text{opt})_{\text{SV}} = 0.0313$, Runtime = 8.0s
+    - `reps=2, seed=7`: Obj = 18.716898, $P(\text{opt})_{\text{shots}} = 0.0303$, $P(\text{opt})_{\text{SV}} = 0.0293$, Runtime = 8.1s
+    - `reps=2, seed=123`: Obj = 18.716898, $P(\text{opt})_{\text{shots}} = 0.0278$, $P(\text{opt})_{\text{SV}} = 0.0314$, Runtime = 9.8s
+    - `reps=3, seed=42`: Obj = 18.716898, $P(\text{opt})_{\text{shots}} = 0.0366$, $P(\text{opt})_{\text{SV}} = 0.0354$, Runtime = 11.4s
+    - `reps=3, seed=7`: Obj = 18.716898, $P(\text{opt})_{\text{shots}} = 0.0317$, $P(\text{opt})_{\text{SV}} = 0.0311$, Runtime = 11.8s
+    - `reps=3, seed=123`: Obj = 18.716898, $P(\text{opt})_{\text{shots}} = 0.0278$, $P(\text{opt})_{\text{SV}} = 0.0319$, Runtime = 27.0s
+- **Final Quantum Selection:** `['C0031', 'C0079', 'C0005', 'C0318', 'C0338', 'C0091']` (exact match to classical brute force).
+
+---
+
+## 8. Real Stage 3 Quantum Simulation Results (Official)
+
+- **Deliverables:** [stage3_results.json](stage3_results.json), [stage3_results.csv](stage3_results.csv) at top level.
+- **Design Justification:** No entanglement is needed because the 6 customers' subscription decisions are independent events (confirmed by competition design); each qubit independently models one customer's outcome, which the organizers confirmed is acceptable when the design choice is explained.
+- **Qubit Mapping & Input Probabilities (Rank Order $\to$ Qubit Index):**
+  - Qubit 0: `C0031` ($p = 0.380956$) $\to R_y(\theta_0 = 1.3308)$
+  - Qubit 1: `C0079` ($p = 0.374971$) $\to R_y(\theta_1 = 1.3178)$
+  - Qubit 2: `C0005` ($p = 0.241190$) $\to R_y(\theta_2 = 1.0264)$
+  - Qubit 3: `C0318` ($p = 0.224620$) $\to R_y(\theta_3 = 0.9870)$
+  - Qubit 4: `C0338` ($p = 0.201533$) $\to R_y(\theta_4 = 0.9298)$
+  - Qubit 5: `C0091` ($p = 0.184674$) $\to R_y(\theta_5 = 0.8856)$
+- **Circuit Architecture:**
+  - 6 logical / physical qubits, depth 2, 7 single-qubit gates, 0 two-qubit gates, 0 SWAPs.
+- **Benchmark Estimations of $P(\ge 3)$:**
+  - **Exact Poisson-Binomial DP:** **0.195029**
+  - **Monte Carlo (100,000 samples):** **0.193000** (Abs Error: 0.002029)
+  - **Ideal Quantum Simulation across Shots (Seed 42):**
+    - Shots = 512: $P(\ge 3) = 0.197266$ (Abs Error: 0.002237)
+    - Shots = 1024: $P(\ge 3) = 0.202148$ (Abs Error: 0.007120)
+    - Shots = 4096: $P(\ge 3) = 0.198486$ (Abs Error: 0.003458)
+    - Shots = 16384: $P(\ge 3) = \mathbf{0.195679}$ (Abs Error: **0.000650**)
+- **Noise Analysis (Depolarizing + 1.5% Readout Error, 8192 shots):**
+  - Unmitigated $P(\ge 3) = 0.207764$ (Abs Error vs Exact: 0.012735)
+- **Sensitivity & Error Propagation:**
+  - $\delta = -0.05 \implies P(\ge 3) = 0.117362$ (Abs: $-0.077667$, **Relative: -39.82%**)
+  - $\delta = -0.02 \implies P(\ge 3) = 0.161966$ (Abs: $-0.033063$, **Relative: -16.95%**)
+  - $\delta = +0.02 \implies P(\ge 3) = 0.230414$ (Abs: $+0.035385$, **Relative: +18.14%**)
+  - $\delta = +0.05 \implies P(\ge 3) = 0.287132$ (Abs: $+0.092103$, **Relative: +47.23%**)
+
+---
+
+## 9. Deliverables Summary (All Stages Complete)
+
+| Stage | Deliverable Files (Top-Level) | Status | Description |
+|---|---|---|---|
+| **Stage 1** | `stage1_results.csv` | **Complete** | 100 customer subscription probabilities, ranks, top-10 flag |
+| **Stage 2** | `stage2_results.json`, `stage2_results.csv` | **Complete** | QUBO / QAOA selection of 6 customers, comparison tables, metrics |
+| **Stage 3** | `stage3_results.json`, `stage3_results.csv` | **Complete** | 6-qubit circuit simulation for $P(\ge 3)$, noise, error propagation |

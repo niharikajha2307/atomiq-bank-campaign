@@ -1,0 +1,217 @@
+{
+  "selected_customers": [
+    {
+      "rank": 1,
+      "customer_id": "C0031",
+      "predicted_probability": 0.3809563326386315
+    },
+    {
+      "rank": 2,
+      "customer_id": "C0079",
+      "predicted_probability": 0.3749714028732046
+    },
+    {
+      "rank": 4,
+      "customer_id": "C0005",
+      "predicted_probability": 0.24119034118622493
+    },
+    {
+      "rank": 5,
+      "customer_id": "C0318",
+      "predicted_probability": 0.224620278468405
+    },
+    {
+      "rank": 8,
+      "customer_id": "C0338",
+      "predicted_probability": 0.20153278958214402
+    },
+    {
+      "rank": 10,
+      "customer_id": "C0091",
+      "predicted_probability": 0.18467375981494016
+    }
+  ],
+  "qubit_mapping": {
+    "qubit_0": {
+      "customer_id": "C0031",
+      "rank": 1,
+      "probability": 0.3809563326386315,
+      "ry_rotation_angle_rad": 1.3304
+    },
+    "qubit_1": {
+      "customer_id": "C0079",
+      "rank": 2,
+      "probability": 0.3749714028732046,
+      "ry_rotation_angle_rad": 1.318057
+    },
+    "qubit_2": {
+      "customer_id": "C0005",
+      "rank": 4,
+      "probability": 0.24119034118622493,
+      "ry_rotation_angle_rad": 1.02673
+    },
+    "qubit_3": {
+      "customer_id": "C0318",
+      "rank": 5,
+      "probability": 0.224620278468405,
+      "ry_rotation_angle_rad": 0.987522
+    },
+    "qubit_4": {
+      "customer_id": "C0338",
+      "rank": 8,
+      "probability": 0.20153278958214402,
+      "ry_rotation_angle_rad": 0.931122
+    },
+    "qubit_5": {
+      "customer_id": "C0091",
+      "rank": 10,
+      "probability": 0.18467375981494016,
+      "ry_rotation_angle_rad": 0.888403
+    }
+  },
+  "circuit_endianness_note": "Qiskit standard little-endian: Qubit 0 is rightmost bit (index 5 from left in bitstring).",
+  "exact_analytical_result": {
+    "p_ge3_subscribe": 0.195029,
+    "full_pmf_0_to_6": [
+      0.148203,
+      0.341129,
+      0.315639,
+      0.150415,
+      0.039064,
+      0.005261,
+      0.000288
+    ]
+  },
+  "monte_carlo_result": {
+    "samples": 100000,
+    "p_ge3_estimate": 0.193,
+    "absolute_error": 0.002029
+  },
+  "circuit_characteristics": {
+    "logical_qubits": 6,
+    "physical_qubits": 6,
+    "original_depth": 2,
+    "transpiled_depth": 2,
+    "one_qubit_gates": 7,
+    "two_qubit_gates": 0,
+    "swap_gates": 0
+  },
+  "ideal_quantum_simulation_runs": [
+    {
+      "shots": 512,
+      "seed": 42,
+      "p_ge3_estimate": 0.197266,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.002237
+    },
+    {
+      "shots": 512,
+      "seed": 7,
+      "p_ge3_estimate": 0.189453,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.005576
+    },
+    {
+      "shots": 512,
+      "seed": 123,
+      "p_ge3_estimate": 0.197266,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.002237
+    },
+    {
+      "shots": 1024,
+      "seed": 42,
+      "p_ge3_estimate": 0.202148,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.00712
+    },
+    {
+      "shots": 1024,
+      "seed": 7,
+      "p_ge3_estimate": 0.196289,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.00126
+    },
+    {
+      "shots": 1024,
+      "seed": 123,
+      "p_ge3_estimate": 0.210938,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.015909
+    },
+    {
+      "shots": 4096,
+      "seed": 42,
+      "p_ge3_estimate": 0.198486,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.003458
+    },
+    {
+      "shots": 4096,
+      "seed": 7,
+      "p_ge3_estimate": 0.198975,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.003946
+    },
+    {
+      "shots": 4096,
+      "seed": 123,
+      "p_ge3_estimate": 0.195557,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.000528
+    },
+    {
+      "shots": 16384,
+      "seed": 42,
+      "p_ge3_estimate": 0.195679,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.00065
+    },
+    {
+      "shots": 16384,
+      "seed": 7,
+      "p_ge3_estimate": 0.192444,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.002585
+    },
+    {
+      "shots": 16384,
+      "seed": 123,
+      "p_ge3_estimate": 0.194824,
+      "exact_p_ge3": 0.195029,
+      "absolute_error": 0.000204
+    }
+  ],
+  "noisy_simulation": {
+    "noise_model": "1-qubit depolarizing (0.1%) + readout error (1.5%)",
+    "shots": 8192,
+    "p_ge3_unmitigated": 0.207764,
+    "absolute_error": 0.012735
+  },
+  "error_propagation_sensitivity": [
+    {
+      "delta": -0.05,
+      "shifted_p_ge3": 0.117362,
+      "absolute_change": -0.077667,
+      "relative_change_pct": -39.82
+    },
+    {
+      "delta": -0.02,
+      "shifted_p_ge3": 0.161966,
+      "absolute_change": -0.033063,
+      "relative_change_pct": -16.95
+    },
+    {
+      "delta": 0.02,
+      "shifted_p_ge3": 0.230414,
+      "absolute_change": 0.035385,
+      "relative_change_pct": 18.14
+    },
+    {
+      "delta": 0.05,
+      "shifted_p_ge3": 0.287132,
+      "absolute_change": 0.092103,
+      "relative_change_pct": 47.23
+    }
+  ]
+}
