@@ -31,13 +31,14 @@
   - `Stage2_Data.csv` (400 rows, 5 cols)
   - `Stage2_Constraints.csv` (6 rows, 4 cols)
 
-### 4. Step 4 & 5: Data Inspection & Open Questions for Organizers
-- **Status:** Analysis complete; awaiting organizer response.
+### 4. Step 4 & 5: Data Inspection & Organizer Queries (RESOLVED)
+- **Status:** **RESOLVED.**
 - **Stage1_Train Analysis:** 300 rows, 16 features, target `y` has 35 "yes" (11.67%) and 265 "no" (88.33%). Heavy class imbalance. `pdays = -1` present in 254/300 rows (customer not previously contacted).
-- **Stage1_Test Analysis:** 100 rows, 15 features, no `y` and no `customer_id`.
-- **Open Questions for Hackathon Organizers:**
-  1. **Missing `customer_id` Mapping:** `Stage1_Test` has 100 feature rows but no `customer_id`. `Stage2_Data` contains 400 IDs, of which exactly 100 IDs do not appear in `Stage1_Train`. Does the row order of `Stage1_Test` match these 100 unmatched IDs in ascending alphanumeric order, or will an updated file with IDs be provided?
-  2. **`Stage2_Data` Customer Count Mismatch:** PDF Section 3 describes `Stage2_Data` as *"operational inputs for the 100 test customers"*, but the sheet contains **400 rows** (spanning all training and test customer IDs). Are we expected to filter `Stage2_Data` to only the 100 test customer IDs, or does the full 400-row table remain the operational lookup table?
+- **Stage1_Test Analysis:** 100 rows, 15 features + `customer_id`.
+- **Resolution of Open Questions:**
+  1. **`customer_id` Mapping Resolved:** The organizers issued a corrected release workbook (`bank_campaign_participant_release (1).xlsx`) containing the explicit `customer_id` column for `Stage1_Test`. Verified: Exactly 100 unique customer IDs, 0 overlap with `Stage1_Train`, and all 100 are present in `Stage2_Data`. All sheets were re-exported with `dtype=str` and `keep_default_na=False`.
+  2. **`Stage2_Data` Scope Resolved:** The 400 rows represent the complete operational lookup table across all campaign participants. For Stage 2 optimization, we filter `Stage2_Data` to match our top-10 ranked test customers produced by Stage 1.
+- **Strict Data Hygiene Commitment:** `customer_id` is treated strictly as an operational database key. It is never used as a model feature and will not enter any preprocessing, transformation, or feature selection step.
 
 ### 5. Stage 1 Model Development & 5-Fold Stratified Cross-Validation
 - **Status:** Complete on `Stage1_Train` ONLY.
@@ -80,11 +81,18 @@
   - Budget ($\le 25$) encoded via 5 binary slack bits.
   - Capacity ($\le 22$) encoded via 5 binary slack bits.
   - **Total QUBO size:** Exactly **20 qubits** (185 Pauli terms in Ising Hamiltonian).
+- **Constraint Enforcement & Violation Analysis:**
+  - **Constraints Enforced Inside QUBO:** All three constraints ($C_1: \sum x_i = 6$, $C_2: \sum c_i x_i \le 25$, $C_3: \sum u_i x_i \le 22$) are mathematically encoded inside the QUBO Hamiltonian via quadratic penalties and binary slack expansions.
+  - **Why Full-Slack QUBO Was Chosen:** It allows the quantum state evolution itself to penalize infeasible allocations in Hilbert space rather than relying on unguided post-selection. The full-slack formulation is retained in the codebase as the rigorous baseline.
+  - **Sample Violation Rates (across 2,048 measurement shots):**
+    - **QAOA `reps=1`:** Overall Infeasible = **80.0%** ($C_1$ size violation: 80.0%, $C_2$ budget violation: 0.0%, $C_3$ capacity violation: 6.1%).
+    - **QAOA `reps=2`:** Overall Infeasible = **75.2%** ($C_1$ size violation: 75.2%, $C_2$ budget violation: 0.0%, $C_3$ capacity violation: 8.3%).
+    - *Observation:* The penalty terms strongly suppress budget and capacity overruns, while the cardinality constraint ($K=6$) is the primary source of sample infeasibility at shallow depths ($p=1, 2$).
 - **Solver Performance Comparison:**
   - **Classical Brute Force** ($C(10,6) = 210$ combinations): Optimal objective = **41.9494** (Selected: `C0005`, `C0007`, `C0009`, `C0025`, `C0028`, `C0031`; Budget used: 14.0/25; Capacity used: 16.0/22; 210/210 valid combinations).
   - **NumPyMinimumEigensolver** (Exact QUBO diagonalization): Objective = **41.9494** in 1.44s (100% match with classical brute force).
-  - **QAOA reps=1** (`SamplerV2` on Aer, COBYLA 50 iters, seed=42): Solved in **15.5s**. Found valid 6-customer selection with objective **41.9494** (Gap vs Classical: **0.0**, exact match!).
-  - **QAOA reps=2** (`SamplerV2` on Aer, COBYLA 50 iters, seed=42): Solved in **47.0s**. Valid selection with objective **39.4252** (Gap vs Classical: **2.5242**; selected rank #4 combination).
+  - **QAOA reps=1** (`SamplerV2` on Aer, COBYLA 50 iters, seed=42): Solved in **15.5s**. Best valid selection has objective **41.9494** (Gap vs Classical: **0.0**, exact match!).
+  - **QAOA reps=2** (`SamplerV2` on Aer, COBYLA 50 iters, seed=42): Solved in **47.0s**. Best valid selection has objective **39.4252** (Gap vs Classical: **2.5242**; selected rank #4 combination).
   - *Diagnosis on prior timeouts:* Qiskit's `StatevectorSampler` hangs on matrix exponential decomposition for 20-qubit Hamiltonians in Python 3.13; decomposing the `QAOAAnsatz` down to native gates and executing on `qiskit_aer.primitives.SamplerV2` executes within seconds.
 - **Dry-run Artifacts:**
   - [outputs/dryrun/dryrun_stage2.json](outputs/dryrun/dryrun_stage2.json)
@@ -97,13 +105,19 @@
   - **Exact Poisson-Binomial DP:** $P(\ge 3) = 0.496398$
   - **Monte Carlo (100,000 samples):** $P(\ge 3) = 0.494680$ (Absolute error: 0.001718)
   - **Ideal Circuit Execution:**
-    - Shots = 512: $P = 0.4785$ (Error: 0.0179)
-    - Shots = 1024: $P = 0.4883$ (Error: 0.0081)
-    - Shots = 4096: $P = 0.5034$ (Error: 0.0070)
-    - Shots = 16384: $P = 0.4924$ (Error: 0.0040 — error shrinks monotonically with $1/\sqrt{N}$)
-  - **Noisy Simulation (Depolarizing + 2% Readout Error):** Unmitigated $P(\ge 3) = 0.511230$ (Error: 0.014833).
+    - Shots = 512: $P = 0.4785$ (Absolute error: 0.0179)
+    - Shots = 1024: $P = 0.4883$ (Absolute error: 0.0081)
+    - Shots = 4096: $P = 0.5034$ (Absolute error: 0.0070)
+    - Shots = 16384: $P = 0.4924$ (Absolute error: 0.0040 — error shrinks monotonically with $1/\sqrt{N}$)
+  - **Noisy Simulation (Depolarizing + 2% Readout Error):** Unmitigated $P(\ge 3) = 0.511230$ (Absolute error: 0.014833).
   - **Circuit Characteristics:** 6 logical/physical qubits, circuit depth = 2, 6 1-qubit gates, 0 2-qubit gates, 0 SWAPs.
-  - **Sensitivity Analysis:** Uniform probability shifts of $\pm 0.02$ and $\pm 0.05$ produce relative shifts of $\approx \pm 8.6\%$ and $\pm 21.4\%$ in campaign success probability.
+  - **Sensitivity Analysis (Relative vs Absolute Labels):**
+    - Base probability: $P(\ge 3) = 0.496398$
+    - Shift $\delta = -0.05$: Absolute change = $-0.1075$ | **Relative change = -21.66%**
+    - Shift $\delta = -0.02$: Absolute change = $-0.0430$ | **Relative change = -8.67%**
+    - Shift $\delta = +0.02$: Absolute change = $+0.0426$ | **Relative change = +8.59%**
+    - Shift $\delta = +0.05$: Absolute change = $+0.1051$ | **Relative change = +21.16%**
+    - *(Note: The $\pm 8.6\%$ and $\pm 21.4\%$ values represent relative changes in $P(\ge 3)$ relative to base probability $0.4964$, corresponding to absolute shifts of roughly $\pm 0.043$ and $\pm 0.106$.)*
 - **Dry-run Artifact:**
   - [outputs/dryrun/dryrun_stage3.json](outputs/dryrun/dryrun_stage3.json)
 
