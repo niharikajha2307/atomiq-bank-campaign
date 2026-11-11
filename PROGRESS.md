@@ -60,10 +60,16 @@
 
 | Model | ROC-AUC | PR-AUC | Precision@10 | Recall@10 | Brier Score | Log Loss | ECE (Calib Err) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Constant_Prior** (Train Prevalence) | -- | 0.1167 ± 0.000 | 0.1167 ± 0.000 | 0.1000 ± 0.000 | 0.1031 ± 0.000 | 0.3602 ± 0.000 | 0.0000 ± 0.000 |
 | **LogisticRegression_Balanced** | **0.6491 ± 0.086** | **0.2544 ± 0.067** | 0.1800 ± 0.045 | 0.2571 ± 0.064 | 0.2022 ± 0.033 | 0.5946 ± 0.088 | 0.2720 ± 0.054 |
-| **HistGradientBoosting_Balanced** | 0.5951 ± 0.096 | 0.2467 ± 0.085 | **0.2000 ± 0.071** | **0.2857 ± 0.101** | 0.1256 ± 0.016 | 0.4580 ± 0.047 | 0.1053 ± 0.026 |
-| **HistGradientBoosting_Calibrated**| 0.5358 ± 0.139 | 0.2112 ± 0.089 | 0.1800 ± 0.084 | 0.2571 ± 0.120 | **0.1024 ± 0.001** | **0.3574 ± 0.006** | **0.0064 ± 0.006** |
+| **LR_Balanced_PriorShift** | **0.6491 ± 0.077** | **0.2544 ± 0.060** | 0.2000 ± 0.067 | 0.1714 ± 0.057 | 0.1069 ± 0.006 | 0.3770 ± 0.043 | 0.0626 ± 0.006 |
+| **LR_Unweighted_C1.0** | 0.6264 ± 0.069 | 0.2391 ± 0.058 | 0.2333 ± 0.082 | 0.2000 ± 0.070 | 0.1035 ± 0.006 | 0.3641 ± 0.029 | 0.0399 ± 0.009 |
+| **LR_Unweighted_C0.3** | 0.6070 ± 0.054 | 0.2354 ± 0.069 | **0.2667 ± 0.133** | 0.2286 ± 0.114 | **0.1012 ± 0.004** | 0.3546 ± 0.017 | 0.0256 ± 0.015 |
+| **LR_Unweighted_C0.1** | 0.5957 ± 0.051 | 0.2461 ± 0.068 | 0.2333 ± 0.082 | 0.2000 ± 0.070 | 0.1016 ± 0.002 | **0.3542 ± 0.011** | 0.0184 ± 0.005 |
+| **LR_Unweighted_C0.03** | 0.5860 ± 0.068 | 0.2174 ± 0.067 | 0.2000 ± 0.125 | 0.1714 ± 0.107 | 0.1024 ± 0.002 | 0.3568 ± 0.006 | 0.0128 ± 0.007 |
 | **LogisticRegression_Calibrated** | 0.5644 ± 0.101 | 0.1821 ± 0.076 | 0.1200 ± 0.110 | 0.1714 ± 0.156 | 0.1026 ± 0.001 | 0.3582 ± 0.006 | **0.0035 ± 0.003** |
+| **HistGradientBoosting_Balanced** | 0.5951 ± 0.096 | 0.2467 ± 0.085 | 0.2000 ± 0.071 | **0.2857 ± 0.101** | 0.1256 ± 0.016 | 0.4580 ± 0.047 | 0.1053 ± 0.026 |
+| **HistGradientBoosting_Calibrated**| 0.5358 ± 0.139 | 0.2112 ± 0.089 | 0.1800 ± 0.084 | 0.2571 ± 0.120 | 0.1024 ± 0.001 | 0.3574 ± 0.006 | 0.0064 ± 0.006 |
 | **QuantumKernel_5Qubit** | 0.4962 ± 0.128 | 0.1356 ± 0.032 | 0.1000 ± 0.071 | 0.1429 ± 0.101 | 0.1042 ± 0.001 | 0.3645 ± 0.003 | 0.0129 ± 0.017 |
 | **QuantumKernel_4Qubit** | 0.4515 ± 0.087 | 0.1289 ± 0.033 | 0.0600 ± 0.089 | 0.0857 ± 0.128 | 0.1075 ± 0.005 | 0.3790 ± 0.021 | 0.0338 ± 0.036 |
 
@@ -97,6 +103,23 @@
 - **Dry-run Artifacts:**
   - [outputs/dryrun/dryrun_stage2.json](outputs/dryrun/dryrun_stage2.json)
   - [outputs/dryrun/dryrun_classical_benchmark.json](outputs/dryrun/dryrun_classical_benchmark.json)
+  - [outputs/dryrun/dryrun_job2_results.json](outputs/dryrun/dryrun_job2_results.json)
+
+### Stage 2 Quantum Solver Benchmark: Penalty-Only vs Dicke+XY vs Random Sampling
+- **Evaluation Setup (Seed 42, 7, 123; reps=1, 2, 3; COBYLA maxiter=200; 5-min timeout per run):**
+  - **Random Sampling Baseline (2,048 samples over 210 feasible combinations):**
+    - Finds the exact optimum (41.9494) in < 1 second.
+    - Hit rate on optimal bitstring: $0.49\%$ (matches theoretical $1/210 = 0.476\%$).
+    - Infeasibility rate: $0.0\%$.
+  - **Penalty-Only QAOA (20 qubits: 10 decision + 10 slack):**
+    - Infeasibility rate: $74.6\% - 79.7\%$ of measurement shots violate constraints.
+    - Hit rate on optimal bitstring: $0.05\% - 0.24\%$ across seeds (below uniform random baseline of $0.48\%$).
+    - Does find the optimal selection ($41.9494$) among valid measured samples at reps=2 (seed 42), but does not beat random sampling in probability concentration.
+  - **Dicke(6) + XY Ring Mixer QAOA (20 qubits, K=6 enforced via mixer structure):**
+    - High sample invalidity ($99.7\% - 100\%$) due to heavy budget/capacity penalty terms distorting the state on shallow depths ($p=1, 2, 3$).
+    - Best valid objective reached: $40.6422$ (Gap vs classic: $1.3072$).
+    - Hit rate on optimal bitstring: $0.0\%$. Does not beat random sampling.
+  - **Honest Finding on Quantum Advantage:** On a 10-candidate binary selection problem, classical random sampling and brute-force evaluate all 210 states in milliseconds with 100% feasibility. Shallow QAOA ($p \le 3$) produces high invalid sample rates ($>74\%$) and achieves lower probability on the ground state than uniform random guessing ($0.1\% \text{ vs } 0.48\%$). This provides clear, honest empirical documentation of current NISQ solver limitations on constrained combinatorial problems.
 
 ### Stage 3 Success Probability Circuit Simulation
 - **Setup:** 6 qubits prepared with $R_y(2 \arcsin(\sqrt{p_i}))$ rotation gates representing subscription probabilities of Stage 2 selected customers.
@@ -126,7 +149,7 @@
 ## What Is Next
 - Awaiting organizer response on the two open questions (`customer_id` mapping and `Stage2_Data` row count scope).
 - Once confirmed:
-  1. Fit selected model (`HistGradientBoosting_Calibrated`) on full `Stage1_Train`.
+  1. Fit the final selected model (choice **pending CV review**) on full `Stage1_Train`.
   2. Run single prediction on `Stage1_Test`.
   3. Produce `stage1_results.csv` with continuous probabilities, ranks, and top-10 flag.
   4. Run Stage 2 QUBO on the true top-10 customers $\to$ `outputs/stage2_results.json`.
