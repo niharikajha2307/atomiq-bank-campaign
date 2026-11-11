@@ -56,6 +56,8 @@ Result files (top level): `stage1_results.csv`, `stage2_results.json` / `.csv`, 
 
 **Solver settings:** Qiskit Aer `SamplerV2`, COBYLA (`maxiter=200`, `tol=1e-4`), 2048 shots, reps 1 to 3, seeds 42, 7, 123 (9 runs). Final selection from reps=1, seed=42; the same optimum was found across all reps and seeds.
 
+**Circuit statistics (final Stage 2 circuit: Dicke(6) + XY-ring QAOA, reps=1, seed=42; Aer, no coupling map, basis gates u, cx, rz, sx, x):** 10 logical and 10 physical qubits; depth 2049 original and 2070 transpiled; `count_ops()` original `{u: 1023, cx: 1013, rz: 10, rxx: 10, ryy: 10, measure: 10, barrier: 4}`, transpiled `{u: 1073, cx: 1033, rz: 10, measure: 10, barrier: 4}`; 1-qubit gates 1083 (1073 u + 10 rz), 2-qubit gates 1033 (cx), 0 SWAPs. Most of the depth and gate count comes from preparing the Dicke state |D(10,6)> (about 1,000 u and 1,013 cx gates); the QAOA layer itself adds only 10 rz and 10 rxx + 10 ryy gates. This is fine on a simulator but would be too deep for current noisy hardware.
+
 **Result:**
 
 | Item | Value |
