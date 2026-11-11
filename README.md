@@ -84,8 +84,9 @@ Result files (top level): `stage1_results.csv`, `stage2_results.json` / `.csv`, 
 | Monte Carlo, 100,000 samples, seed 42 | 0.193000 | 0.002029 |
 | Ideal circuit, 16,384 shots | 0.195679 | 0.000650 |
 | Noisy circuit, 8192 shots (unmitigated) | 0.207764 | 0.012735 |
+| Noisy circuit, 8192 shots (mitigated) | 0.195362 | 0.000333 |
 
-The ideal-circuit error shrinks with shots (512, 1024, 4096, 16384 shots are in `stage3_results.json`). **Noise model:** 0.1% single-qubit depolarizing error and 1.5% symmetric readout error. No error mitigation was applied; all noisy numbers are unmitigated.
+The ideal-circuit error shrinks with shots (512, 1024, 4096, 16384 shots are in `stage3_simulation.json`). **Noise model:** 0.1% single-qubit depolarizing error and 1.5% symmetric readout error. Readout-error mitigation is applied using per-qubit confusion matrix inversion $(A^{-1})^{\otimes 6}$ with assumed flip rate $e = 0.015$, reducing estimation error from $0.012735$ to $0.000333$. Only readout error is mitigated; the 0.1% single-qubit depolarizing gate error is not mitigated. This mitigation method assumes the readout error rate is known from calibration (here taken directly from the noise model specification, as would occur via detector tomography on hardware). Mitigation slightly inflates statistical sampling variance from shot noise (standard error rises from $0.00448$ to $0.00478$). All raw and mitigated values are saved in `stage3_simulation.json` and `stage3_simulation.csv`.
 
 **Circuit statistics (Aer, no coupling map, basis gates u, cx, rz, sx, x):** 6 logical and 6 physical qubits; original and transpiled depth 2 (one rotation layer plus measurement); 6 single-qubit rotation gates, 0 two-qubit gates, 0 SWAPs. `count_ops()`: original `{ry: 6, measure: 6}`, transpiled `{u: 6, measure: 6}`.
 
@@ -116,6 +117,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe scripts/export_sheets.py
 .\.venv\Scripts\python.exe scripts/run_final_stage1.py
 .\.venv\Scripts\python.exe scripts/run_real_stage2_and_stage3.py
+.\.venv\Scripts\python.exe scripts/run_stage3_mitigation.py
 ```
   On macOS or Linux, use `.venv/bin/python` instead. To regenerate the Stage 1 cross-validation results:
 ```

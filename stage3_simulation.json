@@ -186,7 +186,16 @@
     "noise_model": "1-qubit depolarizing (0.1%) + readout error (1.5%)",
     "shots": 8192,
     "p_ge3_unmitigated": 0.207764,
-    "absolute_error": 0.012735
+    "absolute_error": 0.012735,
+    "mitigation_method": "tensor-product per-qubit confusion matrix inversion (A^-1)^\u22976",
+    "readout_error_assumed": 0.015,
+    "unmitigated_estimate": 0.207764,
+    "unmitigated_error_vs_exact": 0.012735,
+    "unmitigated_standard_error": 0.004482,
+    "mitigated_estimate_raw": 0.195362,
+    "mitigated_estimate": 0.195362,
+    "mitigated_error_vs_exact": 0.000333,
+    "mitigated_standard_error": 0.004777
   },
   "error_propagation_sensitivity": [
     {
