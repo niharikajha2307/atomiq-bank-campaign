@@ -12,7 +12,7 @@ Team: PraNi Verse | Repo: https://github.com/niharikajha2307/atomiq-bank-campaig
 | 2 | Choose 6 of the top 10 under budget and capacity limits | Binary optimization solved with QAOA (Dicke state + XY mixer) on a simulator | Quantum solver, checked against classical brute force |
 | 3 | Estimate P(at least 3 of the 6 subscribe) | 6-qubit circuit, one qubit per customer | Quantum circuit, checked against exact and Monte Carlo |
 
-Result files (top level): `stage1_results.csv`, `stage2_results.json` / `.csv`, `stage3_results.json` / `.csv`. All files use `customer_id` exactly as given.
+Result files (top level): `stage1_results.csv`, `stage2_results.json` / `.csv`, `stage3_results.json` / `.csv`. All files use `customer_id` exactly as given. Stage 1 holds `customer_id`, predicted probability, rank and top-10 flag for all 100 test customers; Stage 2 holds the top-10 inputs, the six selected IDs, totals, objective, bitstrings, classical optimum and gap; Stage 3 holds the qubit order, probabilities, circuit parameters, counts, quantum estimate, exact and Monte Carlo results and errors.
 
 ## 2. Data and rules followed
 - Source: organizers' corrected release `inputs/bank_campaign_participant_release (1).xlsx` (adds `customer_id` to `Stage1_Test`; all other sheets identical to the first release). Checked: 100 unique test IDs, none in `Stage1_Train`, all in `Stage2_Data`.
@@ -86,7 +86,7 @@ Result files (top level): `stage1_results.csv`, `stage2_results.json` / `.csv`, 
 | Noisy circuit, 8192 shots (unmitigated) | 0.207764 | 0.012735 |
 | Noisy circuit, 8192 shots (mitigated) | 0.195362 | 0.000333 |
 
-The ideal-circuit error shrinks with shots (512, 1024, 4096, 16384 shots are in `stage3_simulation.json`). **Noise model:** 0.1% single-qubit depolarizing error and 1.5% symmetric readout error. Readout-error mitigation is applied using per-qubit confusion matrix inversion $(A^{-1})^{\otimes 6}$ with assumed flip rate $e = 0.015$, reducing estimation error from $0.012735$ to $0.000333$. Only readout error is mitigated; the 0.1% single-qubit depolarizing gate error is not mitigated. This mitigation method assumes the readout error rate is known from calibration (here taken directly from the noise model specification, as would occur via detector tomography on hardware). Mitigation slightly inflates statistical sampling variance from shot noise (standard error rises from $0.00448$ to $0.00478$). All raw and mitigated values are saved in `stage3_simulation.json` and `stage3_simulation.csv`.
+The ideal-circuit error shrinks with shots (512, 1024, 4096, 16384 shots are in `stage3_results.json`). **Noise model:** 0.1% single-qubit depolarizing error and 1.5% symmetric readout error. Readout-error mitigation is applied using per-qubit confusion matrix inversion $(A^{-1})^{\otimes 6}$ with assumed flip rate $e = 0.015$, reducing estimation error from $0.012735$ to $0.000333$. Only readout error is mitigated; the 0.1% single-qubit depolarizing gate error is not mitigated. This mitigation method assumes the readout error rate is known from calibration (here taken directly from the noise model specification, as would occur via detector tomography on hardware). Mitigation slightly inflates statistical sampling variance from shot noise (standard error rises from $0.00448$ to $0.00478$). All raw and mitigated values are saved in `stage3_results.json` and `stage3_results.csv`.
 
 **Circuit statistics (Aer, no coupling map, basis gates u, cx, rz, sx, x):** 6 logical and 6 physical qubits; original and transpiled depth 2 (one rotation layer plus measurement); 6 single-qubit rotation gates, 0 two-qubit gates, 0 SWAPs. `count_ops()`: original `{ry: 6, measure: 6}`, transpiled `{u: 6, measure: 6}`.
 
@@ -131,6 +131,7 @@ python -m venv .venv
 - Weak signal and small data (300 training rows, 35 positives): CV metrics are noisy and model differences are within noise.
 - Quantum kernels did not beat classical baselines. Stage 2 and Stage 3 quantum components work on simulators and do not beat their classical references.
 - Stage 2 constraints do not bind for this top 10, so constraint handling was exercised mainly in the penalty-based formulation and in dry runs on dummy inputs (kept under `outputs/dryrun/`, labelled DUMMY, not used for results).
+- The Stage 2 circuit was run ideal (finite-shot) only, not with a noise model: its depth of about 2,000 with over 1,000 CX gates would be dominated by noise on any current device. Noisy and mitigated results are reported for Stage 3 only.
 - Real hardware was not used. The noise model is simple and not calibrated to a device.
 
 ## 9. Business recommendation
